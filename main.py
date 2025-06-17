@@ -7,7 +7,6 @@ import os
 import logging
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 def setup_logging():
@@ -22,7 +21,7 @@ def setup_logging():
             format='%(asctime)s - %(levelname)s - %(message)s',
             handlers=[
                   logging.FileHandler(log_file),
-                  logging.StreamHandler()  # Também imprime no console
+                  logging.StreamHandler()  
             ]
       )
       return log_file
@@ -125,24 +124,19 @@ def log_summary(results: List[Dict], elapsed_time: float, csv_path: str):
       logging.info("Processamento concluído!")
 
 def main():
-      # Load configuration from environment variables
       bearer_token = os.getenv('BEARER_TOKEN')
       base_url = os.getenv('BASE_URL')
       csv_path = os.getenv('CSV_PATH')
       
-      # Validate environment variables
       if not all([bearer_token, base_url, csv_path]):
             logging.error("Missing required environment variables. Please check your .env file")
             return
       
-      # Setup logging
       log_file = setup_logging()
       logging.info(f"Log file created at: {log_file}")
       
-      # Process all IDs
       results, elapsed_time = process_ids_from_csv(csv_path, bearer_token, base_url)
       
-      # Log summary
       log_summary(results, elapsed_time, csv_path)
 
 if __name__ == "__main__":
